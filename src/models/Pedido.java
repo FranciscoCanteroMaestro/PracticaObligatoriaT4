@@ -1,5 +1,7 @@
 package models;
 
+import utils.Utils;
+
 import java.time.LocalDate;
 
 public class Pedido {
@@ -40,10 +42,14 @@ public class Pedido {
         this.cantidadProducto3 = 0;
     }
 
-    public Pedido(Cliente cliente){
-        cantPedidos++;
-        String idString = "" + cantPedidos + LocalDate.now().getDayOfYear() + LocalDate.now().getMonthValue() + LocalDate.now().getYear();
-        this.id = Integer.parseInt(idString);
+    public Pedido(Cliente cliente, Tienda tienda){
+        //cantPedidos++;
+        int posId = 0;
+        do{
+            posId = Utils.numAleatorio100(1,100000);
+        }while (!tienda.compruebaID(posId));
+
+        this.id = posId;
         this.direccionEnvio = cliente.getDireccion();
         this.localidadEnvio = cliente.getLocalidad();
         this.provinciaEnvio = cliente.getProvincia();
@@ -237,17 +243,17 @@ public class Pedido {
         return salida;
     }
 
-    public boolean hayHueco() {
+    public boolean hayHuecoProductos() {
         if(producto1 == null) return true;
         if(producto2 == null) return true;
         if(producto3 == null) return true;
         return false;
     }
 
-    public boolean comprobarContenidoPedido(int opc) {
-        if (producto1.getId() == opc) return true;
-        if (producto2.getId() == opc) return true;
-        if (producto3.getId() == opc) return true;
+    public boolean comprobarContenidoPedido(int idElegido) {
+        if (producto1.getId() == idElegido) return true;
+        if (producto2.getId() == idElegido) return true;
+        if (producto3.getId() == idElegido) return true;
         return false;
     }
 
@@ -256,4 +262,7 @@ public class Pedido {
         salida = "ID pedido: " + id;
         return salida;
     }
+
+
+
 }

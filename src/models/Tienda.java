@@ -1,5 +1,6 @@
 package models;
 
+import communication.Telegram;
 import data.AdminData;
 import data.ProductosData;
 import utils.Utils;
@@ -44,21 +45,31 @@ public class Tienda {
 
     //Otros Metodos
 
-    public String login(String user, String clave) {
-        if ((admin != null) && admin.getUser().equals(user) && admin.getClave().equals(clave)) return admin.getTipo();
+    public Object login(String user, String clave) {
+        if ((admin != null) && admin.getUser().equals(user) && admin.getClave().equals(clave)) return admin;
         if ((cliente1 != null) && cliente1.getUser().equals(user) && cliente1.getClave().equals(clave))
-            return cliente1.getTipo();
+            return cliente1;
         if ((cliente2 != null) && cliente2.getUser().equals(user) && cliente2.getClave().equals(clave))
-            return cliente2.getTipo();
+            return cliente2;
         if ((trabajador1 != null) && trabajador1.getUser().equals(user) && trabajador1.getClave().equals(clave))
-            return trabajador1.getTipo();
+            return trabajador1;
         if ((trabajador2 != null) && trabajador2.getUser().equals(user) && trabajador2.getClave().equals(clave))
-            return trabajador2.getTipo();
+            return trabajador2;
         if ((trabajador3 != null) && trabajador3.getUser().equals(user) && trabajador3.getClave().equals(clave))
-            return trabajador3.getTipo();
-
-        return "ERROR";
+            return trabajador3;
+        return null;
     }
+
+    public void envioTelegramo(){
+        Telegram.enviarMensajeTelegram(pintaMensaje());
+    }
+
+    private String pintaMensaje() {
+        String salida = "PATATA\n";
+        salida += "PEPE";
+        return salida;
+    }
+
 
     public int cantidadPedidosAdmin() {
         int cantidadPedidos = 0;
@@ -85,15 +96,7 @@ public class Tienda {
     }
 
     public boolean registroCliente(String nombre, String direccion, String localidad, String provincia,
-                                   String introTelefono, String introCorreo, String user, String clave) {
-        if (introTelefono.length() != 9) return false;
-        else {
-            for (int i = 0; i < (introTelefono.length() - 1); i++) {
-                if (!Character.isDigit(introTelefono.charAt(i))) return false;
-            }
-        }
-        int telefono = Integer.parseInt(introTelefono);
-        if (!introCorreo.contains("@")) return false;
+                                   int telefono, String introCorreo, String user, String clave) {
         if (cliente1 == null) {
             cliente1 = new Cliente(user, clave, nombre, direccion, localidad, provincia, telefono, introCorreo);
             return true;
@@ -173,40 +176,40 @@ public class Tienda {
         return salida;
     }
 
-    public boolean realizaPedidoCliente(int opc, Pedido pedidoNuevo, int cantidad) {
+    public boolean realizaPedidoCliente(int idElegida, Pedido pedidoNuevo, int cantidad) {
         Producto producto = null;
         // comprobamos cual es el producto deseado
-        if (opc == producto1.getId() && producto1.getStock() > cantidad) {
+        if (idElegida == producto1.getId() && producto1.getStock() >= cantidad) {
             producto1.sacarStock(cantidad);
             producto = new Producto(producto1);
-            return pedidoNuevo.incluirProducto(opc, producto, cantidad);
+            return pedidoNuevo.incluirProducto(idElegida, producto, cantidad);
         }
-        if (opc == producto2.getId() && producto2.getStock() > cantidad) {
+        if (idElegida == producto2.getId() && producto2.getStock() >= cantidad) {
             producto2.sacarStock(cantidad);
             producto = new Producto(producto2);
-            return pedidoNuevo.incluirProducto(opc, producto, cantidad);
+            return pedidoNuevo.incluirProducto(idElegida, producto, cantidad);
         }
-        if (opc == producto3.getId() && producto3.getStock() > cantidad) {
+        if (idElegida == producto3.getId() && producto3.getStock() >= cantidad) {
             producto3.sacarStock(cantidad);
             producto = new Producto(producto3);
-            return pedidoNuevo.incluirProducto(opc, producto, cantidad);
+            return pedidoNuevo.incluirProducto(idElegida, producto, cantidad);
         }
-        if (opc == producto4.getId() && producto4.getStock() > cantidad) {
+        if (idElegida == producto4.getId() && producto4.getStock() >= cantidad) {
             producto4.sacarStock(cantidad);
             producto = new Producto(producto4);
-            return pedidoNuevo.incluirProducto(opc, producto, cantidad);
+            return pedidoNuevo.incluirProducto(idElegida, producto, cantidad);
         }
-        if (opc == producto5.getId() && producto5.getStock() > cantidad) {
+        if (idElegida == producto5.getId() && producto5.getStock() >= cantidad) {
             producto5.sacarStock(cantidad);
             producto = new Producto(producto5);
-            return pedidoNuevo.incluirProducto(opc, producto, cantidad);
+            return pedidoNuevo.incluirProducto(idElegida, producto, cantidad);
         }
         return false;
     }
 
-    public void cierraSesionCliente(Cliente clienteCopia, String user) {
-        if (cliente1 != null && cliente1.getUser().equals(user)) cliente1 = clienteCopia;
-        if (cliente2 != null && cliente2.getUser().equals(user)) cliente2 = clienteCopia;
+    public void cierraSesionCliente(Cliente clienteCopia) {
+        if (cliente1 != null && cliente1 == clienteCopia) cliente1 = clienteCopia;
+        if (cliente2 != null && cliente2 == clienteCopia) cliente2 = clienteCopia;
     }
 
 
@@ -882,6 +885,26 @@ public class Tienda {
         if (trabajador1 == null) return true;
         if (trabajador2 == null) return true;
         if (trabajador3 == null) return true;
+        return false;
+    }
+
+    //Comprobamos si existe la ID antes de crear el pedido
+    public boolean compruebaID(int posId) {
+        if (cliente1 != null){
+            if (cliente1.getPedido1() != null && cliente1.getPedido1().getId() == posId) return false;
+            if (cliente1.getPedido2() != null && cliente1.getPedido2().getId() == posId) return false;
+        }
+        if (cliente2 != null){
+            if (cliente2.getPedido1() != null && cliente2.getPedido1().getId() == posId) return false;
+            if (cliente2.getPedido2() != null && cliente2.getPedido2().getId() == posId) return false;
+
+        }
+        return true;
+    }
+
+    public boolean huecoCliente() {
+        if (cliente1 == null) return true;
+        if (cliente2 == null) return true;
         return false;
     }
 }

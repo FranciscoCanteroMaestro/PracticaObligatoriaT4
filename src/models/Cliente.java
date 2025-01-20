@@ -1,5 +1,7 @@
 package models;
 
+import utils.Utils;
+
 public class Cliente {
     //Atributos
 
@@ -157,7 +159,7 @@ public class Cliente {
         salida += "Comentario del pedido: "+ pedido.getComentario() +"\n";
         salida += "Detalles del pedido: \n";
         salida += pedido.pintaPedido() + "\n";
-        salida += "Total pedido: " + pedido.getPrecioTotal()  +"\n";;
+        salida += "Total pedido: " + Utils.redondearDosDecimales(pedido.getPrecioTotal())  +"E\n";;
         return salida;
     }
 
@@ -176,7 +178,7 @@ public class Cliente {
             salida += "Comentario del pedido: "+ pedido1.getComentario() +"\n";
             salida += "Detalles del pedido: \n";
             salida += pedido1.pintaPedido() + "\n";
-            salida += "Total pedido: " + pedido1.getPrecioTotal()  +"\n";;
+            salida += "Total pedido: " + Utils.redondearDosDecimales(pedido1.getPrecioTotal())  +"E\n";;
         }
         if(pedido2 !=  null){
             salida += "==============  Pedido "+ pedido2.getId() +"  ================\n";
@@ -192,7 +194,7 @@ public class Cliente {
             salida += "Comentario del pedido: "+ pedido2.getComentario() +"\n";
             salida += "Detalles del pedido: \n";
             salida += pedido2.pintaPedido() + "\n";
-            salida += "Total pedido: " + pedido2.getPrecioTotal()  +"\n";
+            salida += "Total pedido: " + Utils.redondearDosDecimales(pedido2.getPrecioTotal())  +"E\n";
             salida += "\n======================================================\n";
         }
         if (pedido1 == null && pedido2 == null){
@@ -203,4 +205,22 @@ public class Cliente {
         return salida;
     }
 
+    public String pintaCarrito(Pedido pedido) {
+        String salida = "";
+        salida += "==============  Pedido "+ pedido.getId() +"  ================\n";
+        salida += "\n";
+        salida += "Detalles del pedido: \n";
+        salida += pedido.pintaPedido() + "\n";
+        salida += "Total pedido: " + Utils.redondearDosDecimales(pedido.getPrecioTotal())  +"E\n";;
+        return salida;
+    }
+
+    public void guardarPedido(Pedido pedidoNuevo,Cliente clienteCopia) {
+        if (clienteCopia.getPedido1() == null && pedidoNuevo.getProducto1() != null)
+            clienteCopia.setPedido1(pedidoNuevo);
+        else {
+            if (clienteCopia.getPedido2() == null && pedidoNuevo.getProducto1() != null)
+                clienteCopia.setPedido2(pedidoNuevo);
+        }
+    }
 }

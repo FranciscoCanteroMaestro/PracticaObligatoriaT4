@@ -27,7 +27,6 @@ public class Trabajador {
         this.localidad = localidad;
         this.provincia = provincia;
         this.telefono = telefono;
-        this.tipo = "Trabajador";
         this.pedido1 = null;
         this.pedido2 = null;
     }
@@ -41,7 +40,6 @@ public class Trabajador {
         this.localidad = trabajador.localidad;
         this.provincia = trabajador.provincia;
         this.telefono = trabajador.telefono;
-        this.tipo = "Trabajador";
         this.pedido1 = trabajador.pedido1;
         this.pedido2 = trabajador.pedido2;
     }

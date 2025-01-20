@@ -1,5 +1,6 @@
 package utils;
 import models.*;
+import org.w3c.dom.html.HTMLImageElement;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,11 +9,42 @@ import java.util.Scanner;
 public class Menu {
     public static Scanner sc = new Scanner(System.in);
 
+    public static void logo(){
+        System.out.print("""
+                                ::::::::::::::::----------------------------------------------------------------------::::::::::::::
+                                :::::::::::-=**########################################################################*+=::::::::::
+                                ::::::::+%*:..................:-:. .........::::...........::............::::::::::.......-#%=::::::
+                                :-----:+%=.......#= .......:+%%#%%+......:*%%###*:......=#%##%%###################%####%+...+@=:::::
+                                ------*%:......=@@@*......-@%*++=-#%....:@#+++==*@:...:%%+=:-@#------------------=@+---%*....:%+::::
+                                ------##......*@: .*%:....-@#+++++#%+-..:%%**+++*@-...:%%#*+*@#------------------=@+---%#.....%#::::
+                                ------##.....-@+--:=%*....-@#*#@++%#%%..:%%+++++*%-...:%#=---@#------------------=@+---%#.....%#::::
+                                ------##....-@#+=%*:=@+...-@#=*@=-%=*%...%#-=@+.+%:...:%#==-=@#------------------=@+---%#.....##::::
+                                ------#%....-@*==%*:-@=...-@#=*@=-%=*#...%#-=%+.+%:...:%#==-=@#------------------=@+---%#.....%#::::
+                                ------#%....-@#==%*:=@=...-@#=*@=-%%%=...%#-=%+.+%:...:%#==-=@#------------------=@+---%#.....%#::::
+                                ------##....-@#==%*:=@=...-@#=*@=-##....:%#-=%+:*%:...:%#==-=@#------------------=@+---%#.....##::::
+                                ------##....-@*==%*:=@=...-@*=*@=-##....:%#-=%+:*%:...:%#==-=@#------------------=@+---%#.....##::::
+                                ------##....=@#*****#@=...:@#=*@+:##....:%#-=%+.*%:...:%#==-=@#------------------+@+---%#.....##::::
+                                ------##....-@*+++++*@+....*@#:.-*@*....:%%##%##%%:...:%##%##@%##################%@%###@%-....##::::
+                                ------##....-@#***+=+@+....:#%- :%*......#@+--::##....:%@*=====++++++++++++++==%@+@#+**--:....##::::
+                                ------#%.....:*%###%#-........*@+.........:*%#%#:......:*#****#@%*************+#@%@%##%@*.....##::::
+                                ------#%.....................................................:%%#.............................##::::
+                                ------#%......................................................:::.............................##::::
+                                ------##...=%###+.=%###+..*#*#*:..=#: .*+....**....+#: .#+..:*##*-..*+..-#-..=###*:..*###*:...##::::
+                                ------##...+@++=..=@*++...%#-=#*..+%#%-%*...%*+%:..+@%%-%+..=##+-...%%++#@- -@- .##..%#-=%*...##::::
+                                ------##...+@+=-..=@=--...%%+@#...+%:*@@*..=@+=@+..+%:#%@+ . .:=%*..#%--+@- -@- .#*..%%*+=....##::::
+                                ------##...-*:....-****+..+=..=*:.-+:..==.:*:. :*:.=+...+=..:+**=...++..:*:..:+**-...+=.......##::::
+                                ------##..................................................... ................ ...............##::::
+                                ------#%**************************************************************************************%#::::
+                                -----=#%-::::+*******+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-*#####*-:::::%#::::
+                                -----=#%::::*#+++++++##-:::--:==:-:-==--:=-:--:==:=----:::-:::==:-+:-=:--:--:::+%*--*:-+%+::::%#::::
+                                ------+@+::-@*+++++++*@=:::=*=:=:++:+.:+:++-+*-*+:++:=-::+*+:.+#--+:=*-*+:+*:::%#---#=-:##:::=@+::::
+                                -------=#%+::-+*###*+=::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-+#####+:::=%#-:::::
+                                --------=*%#+-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::=#%+:::::::
+                                -------------=++*************************************************+++++++++++++++++**+++=--::::::::::
+                """);
+    }
 
     public static void menuAdmin(Tienda tienda) {
-        Admin admin;
-        int op = -1;
-        do {
             Utils.limpiarPantalla();
             System.out.print("FERNANSHOP\n" +
                     "Bienvenido Admin. Tiene " + tienda.cantidadPedidosAdmin() + " pedidos por asignar\n" +
@@ -23,104 +55,11 @@ public class Menu {
                     "5.- Ver todos los clientes\n" +
                     "6.- Ver todos los trabajadores\n" +
                     "7.- Cerrar sesión\n" +
-                    "Introduce la opción deseada:\s");
-
-            String select = sc.nextLine();
-            if (!Utils.esDigito(select)) {
-                System.out.println("opcion no valida");
-                Utils.pulsaEnter();
-            } else {
-                op = Integer.parseInt(select);
-                switch (op) {
-                    case 1:
-                        Utils.limpiarPantalla();
-                        if(tienda.cantidadPedidosAdmin()>0){
-                            System.out.println(tienda.pintaPedidos());
-                            System.out.print("Introduce el ID del producto que deseas modificar: ");
-                            select = sc.nextLine();
-                            if (!Utils.esDigito(select)) System.out.println("La opción introducida no es válida");
-                            else {
-                                int id = Integer.parseInt(select);
-                                System.out.println(tienda.pintaTrabajadores());
-                                System.out.print("Introduce el nombre del trabajador que desees asignarle el pedido: ");
-                                select = sc.nextLine();
-                                tienda.asignarPedidoATrabajador(id, select);
-                            }
-                        }
-                        else{
-                            System.out.print("No tienes pedidos por asignar.");
-                        }
-                        Utils.pulsaEnter();
-                        break;
-                    case 2:
-                        Utils.limpiarPantalla();
-                        System.out.println(tienda.pintaPedidos());
-                        System.out.print("Introduce el ID del producto que deseas modificar: ");
-                        select = sc.nextLine();
-                        if (!Utils.esDigito(select)) System.out.println("La opción introducida no es válida");
-                        else {
-                            int id = Integer.parseInt(select);
-                            menuModificarPedidoAdmin(id, tienda);
-                        }
-                        Utils.pulsaEnter();
-                        break;
-                    case 3:
-                        Utils.limpiarPantalla();
-                        if (tienda.huecoTrabajadores()){
-                            System.out.print("Ingresa nombre: ");
-                            String nombre = sc.nextLine();
-                            System.out.print("Ingresa tu dirección: ");
-                            String direccion = sc.nextLine();
-                            System.out.print("Ingresa tu localidad: ");
-                            String localidad = sc.nextLine();
-                            System.out.print("Ingresa la provincia: ");
-                            String provincia = sc.nextLine();
-                            System.out.print("Ingresa tu telefono de contacto: ");
-                            String introTelefono = sc.nextLine();
-                            System.out.print("Ingresa tu correo: ");
-                            String introCorreo = sc.nextLine();
-                            System.out.print("Ingresa usuario: ");
-                            String user = sc.nextLine();
-                            System.out.print("Ingresa tu contraseña: ");
-                            String clave = sc.nextLine();
-                            System.out.println((tienda.altaTrabajador(nombre, direccion, localidad, provincia, introTelefono, introCorreo, user, clave))
-                                    ? "Exito al registrarse"
-                                    : "Fallo al registrarse");
-                        }
-                        else{
-                            System.out.println("No se pueden agregar más trabajadores en estos momentos.");
-                        }
-                        Utils.pulsaEnter();
-                        break;
-                    case 4:
-                        Utils.limpiarPantalla();
-                        System.out.println(tienda.pintaPedidos());
-                        Utils.pulsaEnter();
-                        break;
-                    case 5:
-                        Utils.limpiarPantalla();
-                        System.out.println(tienda.pintaClientes());
-                        Utils.pulsaEnter();
-                        break;
-                    case 06:
-                        Utils.limpiarPantalla();
-                        System.out.println("====================================");
-                        System.out.println(tienda.pintaTrabajadores());
-                        System.out.println("====================================");
-                        Utils.pulsaEnter();
-                        break;
-                    case 7:
-                        System.out.println("Cerrando sesión...");
-                        break;
-                    default:
-                        System.out.println("Opción no válida");
-                }
-            }
-        } while (op != 7);
-
+                    "Introduce la opción deseada:\s"
+            );
     }
 
-    private static void menuModificarPedidoAdmin(int id, Tienda tienda) {
+    public static void menuModificarPedidoAdmin(int id, Tienda tienda) {
         String select;
         int op = -1;
         do {
@@ -185,10 +124,9 @@ public class Menu {
 
     }
 
-    public static void menuTrabajador(Tienda tienda, String user) {
+    public static void menuTrabajador(Tienda tienda, Trabajador trabajadorCopia) {
         int op = 0;
         String select;
-        Trabajador trabajadorCopia = tienda.copiarTrabajador(user);
         do {
             Utils.limpiarPantalla();
             System.out.print("FERNANSHOP\n" +
@@ -252,7 +190,7 @@ public class Menu {
                         } while (modificar != 9);
                         break;
                     case 7:
-                        tienda.cierraSesionTrabajador(trabajadorCopia, user);
+                        //tienda.cierraSesionTrabajador(trabajadorCopia, user);
                         System.out.print("\n\nGracias por usar FERNANSHOP :D\n");
                         Utils.pulsaEnter();
                         Utils.limpiarPantalla();
@@ -390,110 +328,16 @@ public class Menu {
         } while (op != 0);
     }
 
-    public static void menuCliente(Tienda tienda, String user) {
-        int op;
-        Cliente clienteCopia = tienda.copiarCliente(user);
-        do {
-            Utils.limpiarPantalla();
-            System.out.print("FERNANSHOP\n" +
-                    "Bienvenido " + tienda.pintaNombreCliente(clienteCopia) + ".\n" +
-                    "1.- Consultar catalogo de productos\n" +
-                    "2.- Realizar un pedido\n" +
-                    "3.- Ver mis pedidos realizados\n" +
-                    "4.- Ver mis datos personales\n" +
-                    "5.- Modificar mis datos personales\n" +
-                    "6.- Cerrar sesión\n" +
-                    "Introduce la opción deseada:\s");
-            op = Integer.parseInt(sc.nextLine());
-            switch (op) {
-                case 1:
-                    System.out.println(tienda.pintaProductosSinStock());
-                    Utils.pulsaEnter();
-                    Utils.limpiarPantalla();
-                    break;
-                case 2:
-                    Pedido pedidoNuevo = new Pedido(clienteCopia);
-                    int cantidad;
-                    int opc;
-                    if (clienteCopia.getPedido1() != null && clienteCopia.getPedido2() != null)
-                        System.out.print("No se pueden realizar más pedidos");
-                    else {
-                        do {
-                            System.out.printf(tienda.pintaProductosSinStock() + """
-                                    
-                                    Introduce un 0 si no quieres cuando quiera parar de añadir productos: \s""");
-                            opc = Integer.parseInt(sc.nextLine());
-                            if (opc > 0) {
-                                if (opc > 5) System.out.println("Numero identificativo erroneo");
-                                else {
-                                    if (pedidoNuevo.hayHueco()) {
-                                        System.out.print("¿Cuantas unidades del producto desea?");
-                                        cantidad = Integer.parseInt(sc.nextLine());
-                                        if (cantidad > 0)
-                                            System.out.println(tienda.realizaPedidoCliente(opc, pedidoNuevo, cantidad) ? "Producto añadido" : "No hay Stock suficiente.");
-                                        else System.out.println("Cantidad no aceptada");
-                                    } else {
-                                        if (!pedidoNuevo.comprobarContenidoPedido(opc))
-                                            System.out.println("No puede añadir más productos aunque puede añadir más cantidad a los ya elegidos");
-                                        else {
-                                            System.out.print("¿Cuantas unidades del producto desea? ");
-                                            cantidad = Integer.parseInt(sc.nextLine());
-                                            if (cantidad != 0)
-                                                System.out.println(tienda.realizaPedidoCliente(opc, pedidoNuevo, cantidad) ? "Producto añadido" : "No hay Stock suficiente.");
-                                        }
-                                    }
-                                }
-                            }
-                        } while (opc > 0);
-                        if (clienteCopia.getPedido1() == null && pedidoNuevo.getProducto1() != null)
-                            clienteCopia.setPedido1(pedidoNuevo);
-                        else {
-                            if (clienteCopia.getPedido2() == null && pedidoNuevo.getProducto1() != null)
-                                clienteCopia.setPedido2(pedidoNuevo);
-                        }
-                        tienda.asignarPedido(pedidoNuevo);
-                    }
-                    Utils.pulsaEnter();
-                    Utils.limpiarPantalla();
-                    break;
-                case 3:
-                    System.out.println(tienda.pintaPedidosCliente(clienteCopia));
-                    Utils.pulsaEnter();
-                    Utils.limpiarPantalla();
-                    break;
-                case 4:
-                    System.out.println(tienda.pintaDatosCliente(clienteCopia));
-                    Utils.pulsaEnter();
-                    Utils.limpiarPantalla();
-                    break;
-                case 5:
-                    String datoNuevo = "";
-                    int modificar;
-                    do {
-                        menuModificarPerfil();
-                        modificar = Integer.parseInt(sc.nextLine());
-                        if (modificar != 9) {
-                            System.out.print("Introduce el nuevo dato: ");
-                            datoNuevo = sc.nextLine();
-                            System.out.println(tienda.modificarDatoCliente(modificar, datoNuevo, clienteCopia)
-                                    ? "Modificación realizada con exito"
-                                    : "Error al realizar modificación");
-                        } else System.out.println("Error al realizar modificación");
-                        Utils.pulsaEnter();
-                        Utils.limpiarPantalla();
-                    } while (modificar != 9);
-                    break;
-                case 6:
-                    System.out.print("Gracias por usar FERNANSHOP :D\n");
-                    tienda.cierraSesionCliente(clienteCopia, user);
-                    Utils.pulsaEnter();
-                    Utils.limpiarPantalla();
-                    break;
-                default:
-                    System.out.println("Error, opción no valida.");
-                    break;
-            }
-        } while (op != 6);
+    public static void menuCliente(Tienda tienda, Cliente clienteCopia) {
+        System.out.print("FERNANSHOP\n" +
+                "Bienvenido " + tienda.pintaNombreCliente(clienteCopia) + ".\n" +
+                "1.- Consultar catalogo de productos\n" +
+                "2.- Realizar un pedido\n" +
+                "3.- Ver mis pedidos realizados\n" +
+                "4.- Ver mis datos personales\n" +
+                "5.- Modificar mis datos personales\n" +
+                "6.- Cerrar sesión\n" +
+                "Introduce la opción deseada:\s");
     }
 
 
@@ -549,5 +393,9 @@ public class Menu {
                 modificar = 0;
             }
         } while (modificar != 0);
+    }
+
+    public static void menuProductosParaPedidos(Tienda tienda) {
+        System.out.println(tienda.pintaProductosSinStock());
     }
 }
