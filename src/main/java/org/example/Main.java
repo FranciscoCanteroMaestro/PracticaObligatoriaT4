@@ -5,6 +5,7 @@ import models.*;
 import utils.Menu;
 import utils.Utils;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -308,6 +309,7 @@ public class Main {
                                     ? "Exito al registrarse"
                                     : "Fallo al registrarse");
                             String token = generarToken();
+
                         }
                         break;
                     default:
@@ -319,7 +321,17 @@ public class Main {
 
     private static String generarToken() {
         String token = "";
-
+        String nums = "1234567890";
+        String carEspe =".:!$%&/()=*+-_";
+        String letras ="abcdefghijklmnopqrstuvwxyz";
+        for (int i = 0; i < 10; i++) {
+            switch ((int)(Math.random()*4)){
+                case 0-> token += carEspe.charAt(Utils.numAleatorio100(0,( carEspe.length())-1));
+                case 1-> token += nums.charAt(Utils.numAleatorio100(0,nums.length()-1));
+                case 2-> token += letras.charAt(Utils.numAleatorio100(0,letras.length()-1));
+                case 3-> token += letras.toUpperCase().charAt(Utils.numAleatorio100(0,letras.length()-1));
+            };
+        }
         return token;
     }
 
